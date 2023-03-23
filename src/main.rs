@@ -9,6 +9,10 @@ struct TriggerUnusualSpendingEmail {
 }
 
 impl TriggerUnusualSpendingEmail {
+    pub fn new(payments: Box<dyn Payments>) -> Self {
+        Self { payments }
+    }
+
     pub fn trigger(&mut self, user_id: &str) {
         self.payments.by_user_and_period(user_id, 2023, 3);
     }
@@ -33,11 +37,10 @@ mod test {
         payments
             .expect_by_user_and_period()
             .times(1)
-            .returning(|_, _, _| ());
+            .withf(move |user_id: &str, _, _| user_id == a_user_id)
+            .return_const(());
 
-        let mut application = TriggerUnusualSpendingEmail {
-            payments: Box::new(payments),
-        };
+        let mut application = TriggerUnusualSpendingEmail::new(Box::new(payments));
 
         application.trigger(a_user_id);
     }
