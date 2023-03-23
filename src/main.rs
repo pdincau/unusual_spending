@@ -29,7 +29,7 @@ mod test {
     use crate::TriggerUnusualSpendingEmail;
 
     #[test]
-    fn it_retrieves_payments_for_the_current_month() {
+    fn it_retrieves_payments_for_a_user_and_period() {
         let a_user_id = "aUserId";
 
         let mut payments = MockPayments::new();
