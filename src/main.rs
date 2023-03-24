@@ -24,15 +24,15 @@ trait Payments {
 }
 
 struct Payment {
-    price: String,
+    price: usize,
     description: String,
     category: Category,
 }
 
 impl Payment {
-    pub fn new(price: &str, description: &str, category: Category) -> Self {
+    pub fn new(price: usize, description: &str, category: Category) -> Self {
         Self {
-            price: price.to_string(),
+            price,
             description: description.to_string(),
             category,
         }
@@ -52,7 +52,7 @@ mod test {
     #[test]
     fn it_retrieves_payments_for_a_user_and_period() {
         let a_user_id = "aUserId";
-        let a_payment = Payment::new("price", "description", Category::Restaurants);
+        let a_payment = Payment::new(63400, "Lunch at Canavacciuolo", Category::Restaurants);
 
         let mut payments = MockPayments::new();
 
