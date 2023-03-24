@@ -23,14 +23,22 @@ trait Payments {
     fn by_user_and_period(&self, user_id: &str, year: u32, month: u8) -> Vec<Payment>;
 }
 
+struct Price(usize);
+
+impl Price {
+    pub fn new(value: usize) -> Price {
+        Price(value)
+    }
+}
+
 struct Payment {
-    price: usize,
+    price: Price,
     description: String,
     category: Category,
 }
 
 impl Payment {
-    pub fn new(price: usize, description: &str, category: Category) -> Self {
+    pub fn new(price: Price, description: &str, category: Category) -> Self {
         Self {
             price,
             description: description.to_string(),
@@ -52,7 +60,11 @@ mod test {
     #[test]
     fn it_retrieves_payments_for_a_user_and_period() {
         let a_user_id = "aUserId";
-        let a_payment = Payment::new(63400, "Lunch at Canavacciuolo", Category::Restaurants);
+        let a_payment = Payment::new(
+            Price::new(63400),
+            "Lunch at Canavacciuolo",
+            Category::Restaurants,
+        );
 
         let mut payments = MockPayments::new();
 
@@ -68,5 +80,5 @@ mod test {
 }
 
 //TODO
-// 1. return 1 payment
+// 1. return 1 payment x
 // 2. return result from payments
