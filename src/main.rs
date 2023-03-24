@@ -23,7 +23,14 @@ trait Payments {
     fn by_user_and_period(&self, user_id: &str, year: u32, month: u8) -> Vec<Payment>;
 }
 
+#[derive(Debug, PartialEq)]
 struct Price(usize);
+
+impl From<f64> for Price {
+    fn from(value: f64) -> Self {
+        Price::new((value * 100.0) as usize)
+    }
+}
 
 impl Price {
     pub fn new(value: usize) -> Price {
@@ -76,6 +83,11 @@ mod test {
         let application = TriggerUnusualSpendingEmail::new(Box::new(payments));
 
         application.trigger(a_user_id);
+    }
+
+    #[test]
+    fn price_can_be_created_from_floats() {
+        assert_eq!(Price::new(63450), Price::from(634.5));
     }
 }
 
